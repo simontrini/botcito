@@ -224,8 +224,8 @@ class Doctor :
 ** N° Opera|  % Ganancia | OperacionAbierta |  |       Saldo     | SaldoSimbolo        **
 **   {numeroOperacione}--{NumeroPerdida}    |    {gananciaAcumulada}  |        { operacionAbierta }        || { self.monto }|        { self.saldoVender }    **
 ** Operaciones                                                                     **
-simbolo{operacion['simbolo']} precioSugerido{operacion['precioSugerido']} cantidad{operacion['cantidad']} precioCompra{operacion['precioCompra']} CantidadCompra{operacion['CantidadCompra']} gananciaAcumulada{operacion['gananciaAcumulada']} montoCompra{operacion['montoCompra']}  
-precioSugeridoVenta{operacion['precioSugeridoVenta']} precioVenta{operacion['precioVenta']} CantidadVenta{operacion['CantidadVenta']} montoVenta{operacion['montoVenta']} **
+simbolo :{operacion['simbolo']} precioSugerido :{operacion['precioSugerido']} cantidad :{operacion['cantidad']} precioCompra :{operacion['precioCompra']} CantidadCompra :{operacion['CantidadCompra']} gananciaAcumulada :{operacion['gananciaAcumulada']} montoCompra :{operacion['montoCompra']}  
+precioSugeridoVenta :{operacion['precioSugeridoVenta']} precioVenta :{operacion['precioVenta']} CantidadVenta :{operacion['CantidadVenta']} montoVenta :{operacion['montoVenta']} **
 ********************************************************************************************
 """     
         logging.info(salida)
