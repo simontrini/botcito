@@ -1,4 +1,4 @@
-# https://github.com/simontrini/botcito.git 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
+# https://github.com/simontrini/botcito.git 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 
 import logging
 from clienteBinance import clienteBinance
 from indices import *
@@ -52,11 +52,7 @@ class BotCito :
     def conectar(self):
         api_key    = 'RAGCg4uGonc8ox0nKOZxnK7Ejx8tUXL5VlQ16l9PF46FvzuJeH46n408ekEsE9iw'
         api_secret = 'ZzSYviWTS5BtrA27MQmZ5Ez702DDKOv0il91Sbp4UM1G3V8QuOWR9kMsgShWoNyY'  
-        #
-        
-        #
-        #api_key    = 'a9lsESnZ2WD2fMj7OlHYf8IkxvEfNB0HXK01zkYyeY74oOEHUgLfbI3uypmKfAS5'
-        #api_secret = 'PCQr84bWjXhRivvee5gG5OkI6WjalinuVyDqmHs7YF3yhokW1DipWUFk1ohwTUfj'         
+        #         
         self.client = self.clienteBinan.conectar(api_key, api_secret,True)
         return self.client 
     #def setConexcion(self):        
