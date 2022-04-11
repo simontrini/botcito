@@ -1,4 +1,4 @@
-# https://github.com/simontrini/botcito.git
+# https://github.com/simontrini/botcito.git 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
 import logging
 from clienteBinance import clienteBinance
 from indices import *
