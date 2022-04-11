@@ -93,6 +93,8 @@ def main():
             botcito.indices.mostrar()
             #botcito.indices.escribirLog()
             bandera = botcito.indices.statusKdj()
+            #bandera = botcito.indices.statusRsi()
+            botcito.doctor.setConPerdida(True)
             botcito.doctor.operando(cliente,
                                     saldo,
                                     botcito.indices.getStatusCompra(),

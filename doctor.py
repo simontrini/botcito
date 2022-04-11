@@ -16,6 +16,8 @@ class Doctor :
         self.NumeroPerdida = 0
         self.tipoOperando = 'RSI'
         self.conPerdida = False
+    def setConPerdida(self,estado):
+        self.conPerdida = estado
     def setOperar(self,opera,monto=0,porcentaje=0):
         self.opera = opera
         self.monto = monto
@@ -39,30 +41,21 @@ class Doctor :
             self.operandoRsiKdj(client,saldo,compra,vende,simbolo,precioActual,bandera)
             
     def operandoRsi(self,client,saldo,compra,vende,simbolo,precioActual):
-        #print('operando',compra,vende)
+        print('operandoRsi',compra,vende)
         if self.getOperar():
             if self.getOperacionAbierta() :
                 #vender
-                #print('operandoVenta')
+                print('operandoVenta')
                 if vende and self.ganancia(self.operacion['precioCompra'],precioActual) :
-                    print('venta venta',self.venta(client,precioActual, round(self.saldoVender,self.lotSize(client,simbolo)),simbolo))
-                    self.setOperacionAbierta(False)
-                    self.mostrar()
+                    self.venta(client,precioActual, round(self.saldoVender,self.lotSize(client,simbolo)),simbolo)
                 elif(self.conPerdida):
                     if vende and self.controlPerdida(self.operacion['precioCompra'],precioActual):
-                        print('Control de perdida',self.venta(client,precioActual, round(self.saldoVender,self.lotSize(client,simbolo)),simbolo))
-                        self.setOperacionAbierta(False)
-                        self.mostrar()   
-                        #print('perdida')
+                        self.venta(client,precioActual, round(self.saldoVender,self.lotSize(client,simbolo)),simbolo)
             else:
                 #comprar
                 print('operandoCompra')
                 if self.saldoOK(saldo, self.monto)and compra:
-                    #abre operacion
-                    print('compra compra',self.compra(client, precioActual,self.monto,simbolo))
-                    self.setOperacionAbierta(True)
-                    self.mostrar()
-                    #setOperacion()
+                    self.compra(client, precioActual,self.monto,simbolo)
             
         else:
             logging.info('no operando')
@@ -71,23 +64,16 @@ class Doctor :
         if self.getOperar():
             if self.getOperacionAbierta() :
                 if vende and self.ganancia(self.operacion['precioCompra'],precioActual) and bandera == 'bajo':
-                    print('venta venta',self.venta(client,precioActual, round(self.saldoVender,self.lotSize(client,simbolo)),simbolo))
-                    self.setOperacionAbierta(False)
-                    self.mostrar()
+                    self.venta(client,precioActual, round(self.saldoVender,self.lotSize(client,simbolo)),simbolo)
                 elif(self.conPerdida):
                     if vende and self.controlPerdida(self.operacion['precioCompra'],precioActual):
-                        print('Control de perdida',self.venta(client,precioActual, round(self.saldoVender,self.lotSize(client,simbolo)),simbolo))
-                        self.setOperacionAbierta(False)
-                        self.mostrar()  
+                        self.venta(client,precioActual, round(self.saldoVender,self.lotSize(client,simbolo)),simbolo)
             else:
                 print('operandoCompra')
                 if self.saldoOK(saldo, self.monto)and compra:
                     #tiene que comprar en alto pero con prevenidocompra
                 #if self.saldoOK(saldo, self.monto)and compra and bandera == 'alto':
-                    print('compra compra',self.compra(client, precioActual,self.monto,simbolo))
-                    self.setOperacionAbierta(True)
-                    self.mostrar()
-            
+                    self.compra(client, precioActual,self.monto,simbolo)
         else:
             logging.info('no operando')
             
@@ -165,12 +151,13 @@ class Doctor :
             self.numeroOperacione += 1
             self.SaldoComprar(order['fills'][0]['qty'],(float(order['fills'][0]['price'])*float(order['fills'][0]['qty'])))
             print('si se ejecuto la compra')
-            #self.mostrar()
-            return [True,self.operacion] 
+            self.mostrar()
+            self.setOperacionAbierta(True)  
+            return 
             
         else:
             print('no se ejecuto la compra')
-            return [False,None] 
+            return 
         
     def venta(self,client, precio, cantidad,simbolo):
         calculo = Calculos()       
@@ -186,12 +173,13 @@ class Doctor :
             self.operacion['montoVenta'] = float(order['fills'][0]['price'])*float(order['fills'][0]['qty'])
             self.SaldoVender(order['fills'][0]['qty'],(float(order['fills'][0]['price'])*float(order['fills'][0]['qty'])))
             print('si se ejecuto la venta') 
-            #self.mostrar()
-            return [True,self.operacion] 
+            self.mostrar()
+            self.setOperacionAbierta(False)  
+            return  
             
         else:
             print('no se ejecuto la venta')
-            return [False,None]   
+            return   
         
     def SaldoComprar(self, CantidadCompra,monto):
         self.saldoVender += float(CantidadCompra)
@@ -219,15 +207,27 @@ class Doctor :
         operacionAbierta = self.getOperacionAbierta()
         operacion = self.operacion
         NumeroPerdida = self.NumeroPerdida
-        salida = f"""
+        cabeza = f"""
 *********************{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***Indicador:{self.tipoOperando}***Manejo de Perdidas:{self.conPerdida}*******************
-** N° Opera|  % Ganancia | OperacionAbierta |  |       Saldo     | SaldoSimbolo        **
+** N° Opera|  % Ganancia | OperacionAbierta |  |       Saldo     | Saldo {operacion['simbolo']}       **
 **   {numeroOperacione}--{NumeroPerdida}    |    {gananciaAcumulada}  |        { operacionAbierta }        || { self.monto }|        { self.saldoVender }    **
-** Operaciones                                                                     **
-simbolo :{operacion['simbolo']} precioSugerido :{operacion['precioSugerido']} cantidad :{operacion['cantidad']} precioCompra :{operacion['precioCompra']} CantidadCompra :{operacion['CantidadCompra']} gananciaAcumulada :{operacion['gananciaAcumulada']} montoCompra :{operacion['montoCompra']}  
-precioSugeridoVenta :{operacion['precioSugeridoVenta']} precioVenta :{operacion['precioVenta']} CantidadVenta :{operacion['CantidadVenta']} montoVenta :{operacion['montoVenta']} **
 ********************************************************************************************
-"""     
+** Operaciones                                                                     **
+**   precioSugerido :{operacion['precioSugerido']}       cantidad :{operacion['cantidad']}           montoCompra :{operacion['montoCompra']}  **
+** precioCompra :{operacion['precioCompra']} CantidadCompra :{operacion['CantidadCompra']} gananciaAcumulada :{operacion['gananciaAcumulada']} **
+"""   
+        if operacionAbierta:
+            pie = f"""
+** precioSugeridoVenta :{operacion['precioSugeridoVenta']} CantidadVenta :{operacion['CantidadVenta']} montoVenta :{operacion['montoVenta']} **
+** precioVenta :{operacion['precioVenta']} 
+********************************************************************************************
+""" 
+        else:
+            pie = f"""
+********************************************************************************************
+                        """                  
+        salida = cabeza + pie  
+                   
         logging.info(salida)
         print(salida)          
 def main():
