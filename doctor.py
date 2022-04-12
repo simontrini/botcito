@@ -162,14 +162,14 @@ class Doctor :
     def venta(self,client, precio, cantidad,simbolo):
         calculo = Calculos()       
         compraVeta = CompraVenta(client,simbolo)
-        #cantidad = cantidad
+        #cantidad = cantidad round(float(monto)/float(precio),self.lotSize(client,simbolo))
         order = compraVeta.comprarMarket(cantidad)
         if  order['orderId'] :
             self.operacion['precioSugeridoVenta'] = precio
             self.operacion['precioVenta'] = order['fills'][0]['price']
-            self.operacion['CantidadVenta'] = order['fills'][0]['qty']
+            self.operacion['CantidadVenta'] = round(order['fills'][0]['qty'],self.lotSize(client,simbolo))
             self.gananciaAcumulada += calculo.porcentaje(self.operacion['precioCompra'],self.operacion['precioVenta'])
-            self.operacion['gananciaAcumulada'] = self.gananciaAcumulada
+            self.operacion['gananciaAcumulada'] = calculo.porcentaje(self.operacion['precioCompra'],self.operacion['precioVenta'])
             self.operacion['montoVenta'] = float(order['fills'][0]['price'])*float(order['fills'][0]['qty'])
             self.SaldoVender(order['fills'][0]['qty'],(float(order['fills'][0]['price'])*float(order['fills'][0]['qty'])))
             print('si se ejecuto la venta') 
@@ -193,10 +193,15 @@ class Doctor :
         return
     def controlPerdida(self,precioCompra,precioActual):
         calculo = Calculos()
-        
-        print('gananciaPerdida','por%', calculo.porcentaje(precioCompra,precioActual),precioCompra ,precioActual)
-        if calculo.porcentaje(precioCompra,precioActual)+self.porcentaje<= 0 :
+        porcentaje = calculo.porcentaje(precioCompra,precioActual)
+        if porcentaje + 1 <= 0 :
+            print('ALERTA*******',porcentaje,'********Alerta')
+            logging.info('ALERTA*******',porcentaje,'********Alerta')
+            return False        
+        if porcentaje+(self.porcentaje*2)<= 0 :
+            print('gananciaPerdida','por%', porcentaje, precioCompra , precioActual)
             self.NumeroPerdida += 1
+            logging.info('gananciaPerdida','por%', porcentaje, 'precioCompra',precioCompra ,'precioActual', precioActual)
             return True
         else:
             return False
@@ -209,17 +214,17 @@ class Doctor :
         NumeroPerdida = self.NumeroPerdida
         cabeza = f"""
 *********************{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***Indicador:{self.tipoOperando}***Manejo de Perdidas:{self.conPerdida}*******************
-** N° Opera|  % Ganancia | OperacionAbierta |  |       Saldo     | Saldo {operacion['simbolo']}       **
+** N° Opera|  % Ganancia | OperacionCerrada |  |       Saldo     | Saldo {operacion['simbolo']}       **
 **   {numeroOperacione}--{NumeroPerdida}    |    {gananciaAcumulada}  |        { operacionAbierta }        || { self.monto }|        { self.saldoVender }    **
 ********************************************************************************************
 ** Operaciones                                                                     **
-**   precioSugerido :{operacion['precioSugerido']}       cantidad :{operacion['cantidad']}           montoCompra :{operacion['montoCompra']}  **
-** precioCompra :{operacion['precioCompra']} CantidadCompra :{operacion['CantidadCompra']} gananciaAcumulada :{operacion['gananciaAcumulada']} **
+** precioSugerido :{operacion['precioSugerido']}       cantidad :{operacion['cantidad']}          montoCompra :{operacion['montoCompra']}  **
+** precioCompra   :{operacion['precioCompra']} CantidadCompra :{operacion['CantidadCompra']}  **
 """   
         if operacionAbierta:
             pie = f"""
 ** precioSugeridoVenta :{operacion['precioSugeridoVenta']} CantidadVenta :{operacion['CantidadVenta']} montoVenta :{operacion['montoVenta']} **
-** precioVenta :{operacion['precioVenta']} 
+** precioVenta :{operacion['precioVenta']} gananciaAcumulada :{operacion['gananciaAcumulada']}
 ********************************************************************************************
 """ 
         else:
