@@ -70,17 +70,17 @@ def main():
     #print('conectando API de mainnet')    
     #client = Client(api_key, api_secret,testnet=False)
     #****
-    balance = client.get_asset_balance(asset='BUSD')
+    balance = client.get_asset_balance(asset='USDT')
     print(balance)
-    compraVeta = CompraVenta(client,'BTCBUSD')
+    compraVeta = CompraVenta(client,'BTCUSDT')
     #order = compraVeta.comprarMarket(0.047111)
     #print('compra',order)
     
-    #order = compraVeta.ventaMarket(1)
-    #print('venta',order)
+    order = compraVeta.ventaMarket(1)
+    print('venta',order)
     ######################
     
-    order = compraVeta.venderStopLimit(0.00110 , 52000.00)
-    print('compra',order)    
+    #order = compraVeta.venderStopLimit(0.00110 , 52000.00)
+    #print('compra',order)    
 if __name__ == '__main__':
     main()

@@ -167,7 +167,7 @@ class Doctor :
         if  order['orderId'] :
             self.operacion['precioSugeridoVenta'] = precio
             self.operacion['precioVenta'] = order['fills'][0]['price']
-            self.operacion['CantidadVenta'] = round(order['fills'][0]['qty'],self.lotSize(client,simbolo))
+            self.operacion['CantidadVenta'] = round(float(order['fills'][0]['qty']),self.lotSize(client,simbolo))
             self.gananciaAcumulada += calculo.porcentaje(self.operacion['precioCompra'],self.operacion['precioVenta'])
             self.operacion['gananciaAcumulada'] = calculo.porcentaje(self.operacion['precioCompra'],self.operacion['precioVenta'])
             self.operacion['montoVenta'] = float(order['fills'][0]['price'])*float(order['fills'][0]['qty'])
@@ -195,13 +195,15 @@ class Doctor :
         calculo = Calculos()
         porcentaje = calculo.porcentaje(precioCompra,precioActual)
         if porcentaje + 1 <= 0 :
-            print('ALERTA*******',porcentaje,'********Alerta')
-            logging.info('ALERTA*******',porcentaje,'********Alerta')
-            return False        
+            mensaje = f"""ALERTA*******{porcentaje}********Alerta"""
+            print(mensaje)
+            logging.info(mensaje)
+            return False
         if porcentaje+(self.porcentaje*2)<= 0 :
-            print('gananciaPerdida','por%', porcentaje, precioCompra , precioActual)
+            mensaje = f"""ALERTA*******control de Perdida por%{porcentaje}**{precioCompra}**{precioActual}****Alerta"""
+            print(mensaje)
             self.NumeroPerdida += 1
-            logging.info('gananciaPerdida','por%', porcentaje, 'precioCompra',precioCompra ,'precioActual', precioActual)
+            logging.info(mensaje)
             return True
         else:
             return False
