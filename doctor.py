@@ -167,7 +167,7 @@ class Doctor :
         if  order['orderId'] :
             self.operacion['precioSugeridoVenta'] = precio
             self.operacion['precioVenta'] = order['fills'][0]['price']
-            self.operacion['CantidadVenta'] = order['fills'][0]['qty']
+            self.operacion['CantidadVenta'] = round(float(order['fills'][0]['qty']),self.lotSize(client,simbolo))
             self.gananciaAcumulada += calculo.porcentaje(self.operacion['precioCompra'],self.operacion['precioVenta'])
             self.operacion['gananciaAcumulada'] = calculo.porcentaje(self.operacion['precioCompra'],self.operacion['precioVenta'])
             self.operacion['montoVenta'] = float(order['fills'][0]['price'])*float(order['fills'][0]['qty'])
