@@ -9,7 +9,7 @@ from time import sleep
 #logging.basicConfig(format='%(asctime)s %(message)s')
 class BotCito :
     def __init__(self, moneda, par, periodo):
-        logging.basicConfig(filename='logKDJ%s.log'% moneda, level=logging.INFO)
+        logging.basicConfig(filename='logMainNet%s.log'% moneda, level=logging.INFO)
         logging.basicConfig(format='%(asctime)s %(message)s')
         self.moneda = moneda
         self.par = par
@@ -50,10 +50,13 @@ class BotCito :
     #.......   periodo
     #.......   clienteBinan
     def conectar(self):
-        api_key    = 'RAGCg4uGonc8ox0nKOZxnK7Ejx8tUXL5VlQ16l9PF46FvzuJeH46n408ekEsE9iw'
-        api_secret = 'ZzSYviWTS5BtrA27MQmZ5Ez702DDKOv0il91Sbp4UM1G3V8QuOWR9kMsgShWoNyY'
+        #api_key    = 'RAGCg4uGonc8ox0nKOZxnK7Ejx8tUXL5VlQ16l9PF46FvzuJeH46n408ekEsE9iw'
+        #api_secret = 'ZzSYviWTS5BtrA27MQmZ5Ez702DDKOv0il91Sbp4UM1G3V8QuOWR9kMsgShWoNyY'
+        api_key    = 'a9lsESnZ2WD2fMj7OlHYf8IkxvEfNB0HXK01zkYyeY74oOEHUgLfbI3uypmKfAS5'
+        api_secret = 'PCQr84bWjXhRivvee5gG5OkI6WjalinuVyDqmHs7YF3yhokW1DipWUFk1ohwTUfj'
         #
-        self.client = self.clienteBinan.conectar(api_key, api_secret,True)
+        #self.client = self.clienteBinan.conectar(api_key, api_secret,True)
+        self.client = self.clienteBinan.conectar(api_key, api_secret)
         return self.client
     #def setConexcion(self):
         #self.client = self.clienteBinan.conectar()
