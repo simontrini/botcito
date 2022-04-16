@@ -2,7 +2,7 @@
 import logging
 from clienteBinance import clienteBinance
 from indices import *
-from balance import Balance 
+from balance import Balance
 from doctor import *
 from time import sleep
 #logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.INFO)
@@ -13,66 +13,66 @@ class BotCito :
         logging.basicConfig(format='%(asctime)s %(message)s')
         self.moneda = moneda
         self.par = par
-        self.simbolo = moneda + par 
-        self.periodo = periodo 
+        self.simbolo = moneda + par
+        self.periodo = periodo
         self.clienteBinan = clienteBinance(self.simbolo, periodo)
         self.indices = Indices()
         self.balance = Balance(None,None,moneda)
         self.doctor = Doctor()
-    #.......   moneda    
+    #.......   moneda
     def setMoneda(self, moneda):
         self.moneda = moneda
         return
-    
+
     def getMoneda(self):
-        return self.moneda  
-    #.......   moneda 
-    #.......   par    
+        return self.moneda
+    #.......   moneda
+    #.......   par
     def setPar(self, par):
         self.par = par
         return
-    
+
     def getPar(self):
-        return self.par  
-    #.......   par  
-    #.......   simbolo    
-    def getSimbolo(self):
-        self.simbolo = self.moneda + self.par 
-        return self.simbolo  
+        return self.par
+    #.......   par
     #.......   simbolo
-    #.......   periodo    
+    def getSimbolo(self):
+        self.simbolo = self.moneda + self.par
+        return self.simbolo
+    #.......   simbolo
+    #.......   periodo
     def setPeriodo(self, periodo):
         self.periodo = periodo
         return
-    
+
     def getPeriodo(self):
-        return self.periodo  
-    #.......   periodo   
-    #.......   clienteBinan    
+        return self.periodo
+    #.......   periodo
+    #.......   clienteBinan
     def conectar(self):
-        api_key    = 'RAGCg4uGonc8ox0nKOZxnK7Ejx8tUXL5VlQ16l9PF46FvzuJeH46n408ekEsE9iw'
-        api_secret = 'ZzSYviWTS5BtrA27MQmZ5Ez702DDKOv0il91Sbp4UM1G3V8QuOWR9kMsgShWoNyY'
-        #api_key    = 'a9lsESnZ2WD2fMj7OlHYf8IkxvEfNB0HXK01zkYyeY74oOEHUgLfbI3uypmKfAS5'
-        #api_secret = 'PCQr84bWjXhRivvee5gG5OkI6WjalinuVyDqmHs7YF3yhokW1DipWUFk1ohwTUfj'
+        #api_key    = 'RAGCg4uGonc8ox0nKOZxnK7Ejx8tUXL5VlQ16l9PF46FvzuJeH46n408ekEsE9iw'
+        #api_secret = 'ZzSYviWTS5BtrA27MQmZ5Ez702DDKOv0il91Sbp4UM1G3V8QuOWR9kMsgShWoNyY'
+        api_key    = 'a9lsESnZ2WD2fMj7OlHYf8IkxvEfNB0HXK01zkYyeY74oOEHUgLfbI3uypmKfAS5'
+        api_secret = 'PCQr84bWjXhRivvee5gG5OkI6WjalinuVyDqmHs7YF3yhokW1DipWUFk1ohwTUfj'
         #
-        self.client = self.clienteBinan.conectar(api_key, api_secret,True)
-        #self.client = self.clienteBinan.conectar(api_key, api_secret)
+        #self.client = self.clienteBinan.conectar(api_key, api_secret,True)
+        self.client = self.clienteBinan.conectar(api_key, api_secret)
         return self.client
     #def setConexcion(self):
         #self.client = self.clienteBinan.conectar()
         #return
-    def getConexcion(self):        
-        self.client 
-        return self.client     
-    #.......   clienteBinan    
-    #.......   RSI    
-    #def setConexcion(self):        
+    def getConexcion(self):
+        self.client
+        return self.client
+    #.......   clienteBinan
+    #.......   RSI
+    #def setConexcion(self):
         #self.client = self.clienteBinan.conectar()
         #return
-    #def getRsiUltimo(self,t):        
+    #def getRsiUltimo(self,t):
         #rsiUltimo = rsi.RSI(t)[-1]
-        #return rsiUltimo     
-    #.......   RSI      
+        #return rsiUltimo
+    #.......   RSI
 def main():
     botcito = BotCito('BTC', 'USDT', '1m')#
     clienteBinan = botcito.clienteBinan
@@ -108,8 +108,8 @@ def main():
                                     )
             sleep(1)
         except Exception as e :
-            print("Oops!  Hay problemas en el main.  Try again...",e) 
-            sleep(5)  
-        
+            print("Oops!  Hay problemas en el main.  Try again...",e)
+            sleep(5)
+
 if __name__ == '__main__':
     main()
