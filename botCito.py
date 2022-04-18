@@ -1,4 +1,4 @@
-# https://github.com/simontrini/botcito.git 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
+# https://github.com/simontrini/botcito.git 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
 import logging
 from clienteBinance import clienteBinance
 from indices import *
@@ -81,7 +81,7 @@ def main():
     botcito.balance.setEstable(botcito.getPar())
     saldo = botcito.balance.getEstable()['free']
     botcito.balance.mostrar()
-    botcito.doctor.setOperar(True,50,0.2)
+    botcito.doctor.setOperar(True,45,0.2)
     while True:
         try:
         #if True:

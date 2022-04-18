@@ -195,15 +195,19 @@ class Doctor :
         calculo = Calculos()
         porcentaje = calculo.porcentaje(precioCompra,precioActual)
         if porcentaje + 1 <= 0 :
-            mensaje = f"""ALERTA*******{porcentaje}********Alerta"""
+            mensaje = f"""ALERTA*******{porcentaje}*****{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***Alerta"""
             print(mensaje)
             logging.info(mensaje)
+            sleep(60)
             return False
-        if porcentaje+(self.porcentaje*2)<= 0 :
-            mensaje = f"""ALERTA*******control de Perdida por%{porcentaje}**{precioCompra}**{precioActual}****Alerta"""
+        #ojo numero de cuantas veces el porsentaje de ganancia se toma para el control de perdida
+        factorPerdida = 1
+        if porcentaje+(self.porcentaje*factorPerdida)<= 0 :
+            mensaje = f"""ALERTA*******control de Perdida por%{porcentaje}**{precioCompra}**{precioActual}***{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***Alerta"""
             print(mensaje)
             self.NumeroPerdida += 1
             logging.info(mensaje)
+            sleep(60)
             return True
         else:
             return False
