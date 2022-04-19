@@ -5,6 +5,7 @@ from indices import *
 from balance import Balance
 from doctor import *
 from time import sleep
+import configparser
 #logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.INFO)
 #logging.basicConfig(format='%(asctime)s %(message)s')
 class BotCito :
@@ -19,6 +20,8 @@ class BotCito :
         self.indices = Indices()
         self.balance = Balance(None,None,moneda)
         self.doctor = Doctor()
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini')
     #.......   moneda
     def setMoneda(self, moneda):
         self.moneda = moneda
@@ -50,13 +53,10 @@ class BotCito :
     #.......   periodo
     #.......   clienteBinan
     def conectar(self):
-        #api_key    = 'RAGCg4uGonc8ox0nKOZxnK7Ejx8tUXL5VlQ16l9PF46FvzuJeH46n408ekEsE9iw'
-        #api_secret = 'ZzSYviWTS5BtrA27MQmZ5Ez702DDKOv0il91Sbp4UM1G3V8QuOWR9kMsgShWoNyY'
-        api_key    = 'a9lsESnZ2WD2fMj7OlHYf8IkxvEfNB0HXK01zkYyeY74oOEHUgLfbI3uypmKfAS5'
-        api_secret = 'PCQr84bWjXhRivvee5gG5OkI6WjalinuVyDqmHs7YF3yhokW1DipWUFk1ohwTUfj'
-        #
-        #self.client = self.clienteBinan.conectar(api_key, api_secret,True)
-        self.client = self.clienteBinan.conectar(api_key, api_secret)
+        api_key    = self.config['api']['api_key']
+        api_secret = self.config['api']['api_secret']
+        testNet = self.config['api']['test']
+        self.client = self.clienteBinan.conectar(api_key, api_secret, testNet)
         return self.client
     #def setConexcion(self):
         #self.client = self.clienteBinan.conectar()
@@ -74,17 +74,20 @@ class BotCito :
         #return rsiUltimo
     #.......   RSI
 def main():
-    botcito = BotCito('BTC', 'USDT', '1m')#
+    config = configparser.ConfigParser()
+    config.read('config.ini')    
+    botcito = BotCito(config['par']['simbolo'], config['par']['estable'], config['par']['periodo'])#
     clienteBinan = botcito.clienteBinan
     cliente = botcito.conectar()
     botcito.balance.setCliente(cliente)
     botcito.balance.setEstable(botcito.getPar())
     saldo = botcito.balance.getEstable()['free']
     botcito.balance.mostrar()
-    botcito.doctor.setOperar(True,45,0.2)
+    botcito.doctor.setOperar(config['doctor']['operar'],config['doctor']['saldo'],config['doctor']['ganancia'])
     while True:
         try:
         #if True:
+            #print('TestNet : ',config['api']['test'])
             saldo = botcito.balance.getEstable()['free']
             #print(clienteBinan.simbolo,':',clienteBinan.precioActual1( cliente)) btc_price["price"]
             precioActual = clienteBinan.precioActual( cliente)

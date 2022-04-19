@@ -42,8 +42,13 @@ class clienteBinance:
         self.simbolo = simbolo
         self.periodo = periodo 
     def conectar(self, api_key, api_secret, test = False ):
-        logging.info('conectando API de testnet')
-        print('conectando API de testnet')
+        salida = f"""
+************************************************************************************************************
+** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}******************************************************************  TestNet :{test}  **
+** conectando API                                                  *************************************  **
+************************************************************************************************************"""
+        logging.info(salida)
+        print(salida)
         try:
             client = Client(api_key, api_secret,testnet=test) 
             return client

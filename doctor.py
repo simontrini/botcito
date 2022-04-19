@@ -2,6 +2,7 @@ import logging
 from compraVenta import CompraVenta
 from calculos import *
 from datetime import datetime
+from time import sleep
 class Doctor :
     def __init__(self):
         self.opera = False
@@ -16,6 +17,7 @@ class Doctor :
         self.NumeroPerdida = 0
         self.tipoOperando = 'RSI'
         self.conPerdida = False
+        self.tiempoEspera = 0
     def setConPerdida(self,estado):
         self.conPerdida = estado
     def setOperar(self,opera,monto=0,porcentaje=0):
@@ -39,6 +41,8 @@ class Doctor :
             self.operandoRsi(client,saldo,compra,vende,simbolo,precioActual)
         if self.tipoOperando == 'RSIKDJ':
             self.operandoRsiKdj(client,saldo,compra,vende,simbolo,precioActual,bandera)
+        print('antes de esperar')
+        sleep(self.tiempoEspera)
 
     def operandoRsi(self,client,saldo,compra,vende,simbolo,precioActual):
         print('operandoRsi',compra,vende)
@@ -163,7 +167,7 @@ class Doctor :
         calculo = Calculos()
         compraVeta = CompraVenta(client,simbolo)
         #cantidad = cantidad round(float(monto)/float(precio),self.lotSize(client,simbolo))
-        order = compraVeta.comprarMarket(cantidad)
+        order = compraVeta.ventaMarket(cantidad)
         if  order['orderId'] :
             self.operacion['precioSugeridoVenta'] = precio
             self.operacion['precioVenta'] = order['fills'][0]['price']
@@ -192,22 +196,23 @@ class Doctor :
 
         return
     def controlPerdida(self,precioCompra,precioActual):
+        self.tiempoEspera = 0
         calculo = Calculos()
         porcentaje = calculo.porcentaje(precioCompra,precioActual)
         if porcentaje + 1 <= 0 :
-            mensaje = f"""ALERTA*******{porcentaje}*****{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***Alerta"""
+            mensaje = f"""ALERTA1*******{porcentaje}*****{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***Alerta"""
             print(mensaje)
             logging.info(mensaje)
-            sleep(60)
+            self.tiempoEspera = 60 
             return False
         #ojo numero de cuantas veces el porsentaje de ganancia se toma para el control de perdida
         factorPerdida = 1
         if porcentaje+(self.porcentaje*factorPerdida)<= 0 :
-            mensaje = f"""ALERTA*******control de Perdida por%{porcentaje}**{precioCompra}**{precioActual}***{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***Alerta"""
+            mensaje = f"""2ALERTA*******control de Perdida por%{porcentaje}**{precioCompra}**{precioActual}***{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***Alerta"""
             print(mensaje)
             self.NumeroPerdida += 1
             logging.info(mensaje)
-            sleep(60)
+            self.tiempoEspera = 60
             return True
         else:
             return False

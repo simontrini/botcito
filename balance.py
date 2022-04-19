@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+import configparser
 class Balance :
     #Balance clase para agrupar los saldos del cliente
     #estable moneda estable para el intercambion 
@@ -9,6 +10,8 @@ class Balance :
         self.moneda = moneda        
         #self.saldo = self.client.get_asset_balance(asset= estable)
         #self.saldo = self.setEstable(self.estable)
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini')         
     def getEstable(self):
         return self.getSaldo(self.estable)
     def setEstable(self,nuevaEstable):
@@ -43,8 +46,8 @@ class Balance :
             #abajo = '      '        
         #saldoooo {'asset': 'BUSD', 'free': '10000.00000000', 'locked': '0.00000000'}
         salida = f"""
-***********************{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}********************************************
-** Moneda   |  Libre: |   Bloqueado:  |                                               **
+***********************{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***TestNet :{self.config['api']['test']}*****************************************
+** Moneda   |    Libre: |   Bloqueado:  |                                               **
 **   {saldo['asset']}   | {libre}   |  { bloqueado }      |                                               **
 ********************************************************************************************
 """
@@ -64,15 +67,13 @@ class Balance :
     
 def main():
     from binance.client import Client
-    api_key    = 'RAGCg4uGonc8ox0nKOZxnK7Ejx8tUXL5VlQ16l9PF46FvzuJeH46n408ekEsE9iw'
-    api_secret = 'ZzSYviWTS5BtrA27MQmZ5Ez702DDKOv0il91Sbp4UM1G3V8QuOWR9kMsgShWoNyY'    
-    print('conectando API de testnet')
-    client = Client(api_key, api_secret,testnet=True) 
-    #****
-    #api_key    = 'a9lsESnZ2WD2fMj7OlHYf8IkxvEfNB0HXK01zkYyeY74oOEHUgLfbI3uypmKfAS5'
-    #api_secret = 'PCQr84bWjXhRivvee5gG5OkI6WjalinuVyDqmHs7YF3yhokW1DipWUFk1ohwTUfj'     
-    #print('conectando API de mainnet') 
-    #client = Client(api_key, api_secret,testnet=False) 
+    import configparser
+    config = configparser.ConfigParser()
+    config.read('config.ini') 
+    api_key    = config['api']['api_key']
+    api_secret = config['api']['api_secret']  
+    print('conectando API de testnet',config['api']['test'] )
+    client = Client(api_key, api_secret,testnet=config['api']['test'])
     #****
     #balance = Balance(estable='BTC')
     #***************************************************
