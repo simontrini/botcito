@@ -23,7 +23,7 @@ class Balance :
     def setMoneda(self,nuevaEstable):
         self.estable = nuevaEstable
         return    
-    def getSaldo(self, moneda):        
+    def getSaldo(self, moneda):  
         return self.client.get_asset_balance(asset= moneda)    
     def setCliente(self,client):
         self.client = client
@@ -77,7 +77,7 @@ def main():
     #****
     #balance = Balance(estable='BTC')
     #***************************************************
-    balance = Balance(estable='BUSD')
+    balance = Balance(estable='USDT')
     balance.setCliente(client)
     saldo = balance.getEstable()['free']
     balance.mostrar() 

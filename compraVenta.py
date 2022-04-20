@@ -70,11 +70,11 @@ def main():
     balance = client.get_asset_balance(asset='USDT')
     print(balance)
     compraVeta = CompraVenta(client,'BTCUSDT')
-    order = compraVeta.comprarMarket(0.047111)
-    print('compra',order)
+    #order = compraVeta.comprarMarket(0.047111)
+    #print('compra',order)
 
-    #order = compraVeta.ventaMarket(1)
-    #print('venta',order)
+    order = compraVeta.ventaMarket(1)
+    print('venta',order)
     ######################
 
     #order = compraVeta.venderStopLimit(0.00110 , 52000.00)

@@ -54,10 +54,15 @@ class BotCito :
     #.......   clienteBinan
     def conectar(self):
         api_key    = self.config['api']['api_key']
-        api_secret = self.config['api']['api_secret']
+        api_secret = self.config['api']['api_secret']    
         testNet = self.config['api']['test']
-        self.client = self.clienteBinan.conectar(api_key, api_secret, testNet)
+        if testNet == 'False':
+            testnet = False
+        else:
+            testnet = True
+        self.client = self.clienteBinan.conectar(api_key, api_secret,test = testnet )
         return self.client
+    
     #def setConexcion(self):
         #self.client = self.clienteBinan.conectar()
         #return
@@ -81,7 +86,7 @@ def main():
     cliente = botcito.conectar()
     botcito.balance.setCliente(cliente)
     botcito.balance.setEstable(botcito.getPar())
-    saldo = botcito.balance.getEstable()['free']
+    #saldo = botcito.balance.getEstable()['free']
     botcito.balance.mostrar()
     botcito.doctor.setOperar(config['doctor']['operar'],config['doctor']['saldo'],config['doctor']['ganancia'])
     while True:
