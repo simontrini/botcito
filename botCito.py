@@ -88,7 +88,13 @@ def main():
     botcito.balance.setEstable(botcito.getPar())
     #saldo = botcito.balance.getEstable()['free']
     botcito.balance.mostrar()
-    botcito.doctor.setOperar(config['doctor']['operar'],config['doctor']['saldo'],config['doctor']['ganancia'])
+    if config['doctor']['operar'] == 'False':
+        operar = False
+    else:
+        operar = True    
+    monto = float(config['doctor']['monto'])
+    ganancia = float(config['doctor']['ganancia'])
+    botcito.doctor.setOperar(operar, monto, ganancia)
     while True:
         try:
         #if True:
