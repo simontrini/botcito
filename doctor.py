@@ -43,6 +43,7 @@ class Doctor :
             self.operandoRsiKdj(client,saldo,compra,vende,simbolo,precioActual,bandera)
         print('antes de esperar')
         sleep(self.tiempoEspera)
+        self.tiempoEspera = 0
 
     def operandoRsi(self,client,saldo,compra,vende,simbolo,precioActual):
         print('operandoRsi',compra,vende)
@@ -212,7 +213,7 @@ class Doctor :
             print(mensaje)
             self.NumeroPerdida += 1
             logging.info(mensaje)
-            self.tiempoEspera = 60
+            #self.tiempoEspera = 60
             return True
         else:
             return False

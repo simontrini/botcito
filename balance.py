@@ -32,23 +32,15 @@ class Balance :
         saldo = self.getEstable()
         libre = "{:.6f}".format(float(saldo['free']))
         bloqueado = "{:.6f}".format(float(saldo['locked']))
+        saldo1 = self.getMoneda()
+        libre1 = "{:.6f}".format(float(saldo1['free']))
+        bloqueado1 = "{:.6f}".format(float(saldo1['locked']))        
         
-        #k = "{:.2f}".format(float(self.kdjObj.k))
-        #d = "{:.2f}".format(float(self.kdjObj.d))
-        #j = "{:.2f}".format(float(self.kdjObj.j))
-        #arriba = '      '
-        #abajo = 'abajo '          
-        #if self.kdjObj.Nivel == 'arriba':
-            #arriba = 'arriba'
-            #abajo = '      '
-        #if self.kdjObj.Nivel == 'NiNi':
-            #arriba = '      '
-            #abajo = '      '        
-        #saldoooo {'asset': 'BUSD', 'free': '10000.00000000', 'locked': '0.00000000'}
         salida = f"""
 ***********************{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}***TestNet :{self.config['api']['test']}*****************************************
 ** Moneda   |    Libre: |   Bloqueado:  |                                               **
 **   {saldo['asset']}   | {libre}   |  { bloqueado }      |                                               **
+**   {saldo1['asset']}    | {libre1}   |  { bloqueado1 }      |                                               **
 ********************************************************************************************
 """
         logging.info(salida)
